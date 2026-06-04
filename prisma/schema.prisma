@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// â”€â”€â”€ Auth.js required models â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("admin")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// â”€â”€â”€ Pages & Sections â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+model Page {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  sections        Section[]
+}
+
+model Section {
+  id        String   @id @default(cuid())
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      String
+  order     Int
+  enabled   Boolean  @default(true)
+  content   Json     @default("{}")
+  updatedAt DateTime @updatedAt
+}
+
+// â”€â”€â”€ Services â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+model Service {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  subtitle        String   @default("")
+  description     String   @default("")
+  content         Json?
+  icon            String   @default("star")
+  order           Int      @default(0)
+  enabled         Boolean  @default(true)
+  metaTitle       String?
+  metaDescription String?
+  updatedAt       DateTime @updatedAt
+}
+
+// â”€â”€â”€ Portfolio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+model PortfolioItem {
+  id        String   @id @default(cuid())
+  title     String
+  category  String   @default("")
+  imageUrl  String
+  imageAlt  String   @default("")
+  order     Int      @default(0)
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+// â”€â”€â”€ Testimonials â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  quote     String
+  author    String
+  role      String?
+  event     String?
+  featured  Boolean  @default(false)
+  order     Int      @default(0)
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+// â”€â”€â”€ Site Settings â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+model SiteSettings {
+  id           Int      @id @default(1)
+  siteName     String   @default("Event Fusion")
+  tagline      String   @default("Bespoke occasions, delivered with discretion")
+  contactEmail String   @default("charlottewb@eventfusion.co.uk")
+  phone        String?
+  linkedinUrl  String?
+  formspreeId  String   @default("mlgkrypl")
+  footerText   String?
+  updatedAt    DateTime @updatedAt
+}
+
