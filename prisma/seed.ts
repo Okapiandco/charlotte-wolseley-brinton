@@ -89,7 +89,7 @@ async function main() {
   const testimonials = [
     {
       quote:
-        "You are a SUPERSTAR, Charlotte. You pulled it off, and how! We know we cannot thank you enough for your herculean efforts in mounting the first Cork Street party in over 3 decades in just 3 weeks, but do know that all thanks comes from the depths of our hearts, and we are indebted to you. Your team was beyond fabulous; please extend huge thanks from us for their brilliant work.",
+        "You are a SUPERSTAR, Charlotte. You pulled it off, and how! We know we cannot thank you enough for your herculean efforts in mounting the first Cork Street party in over 3 decades, but do know that all thanks comes from the depths of our hearts, and we are indebted to you. Your team was beyond fabulous; please extend huge thanks from us for their brilliant work.",
       author: "The Pollen Estate",
       event: "Cork Street 100 Years",
       featured: true,
@@ -107,7 +107,7 @@ async function main() {
       quote:
         "We are extremely grateful for all of your efforts. Miraculous really. All done remotely -- unbelievable. The quality of vendors and team is truly a credit to you. A class act all the way.",
       author: "Private Client",
-      event: "Dinner During Covid",
+      event: "Private Dinner Party",
       featured: false,
       order: 2,
     },

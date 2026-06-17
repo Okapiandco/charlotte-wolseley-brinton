@@ -177,7 +177,7 @@ export function HeroSection({ backgroundImage }: Props) {
               color: "rgba(255,255,255,0.85)",
             }}
           >
-            &ldquo;Nothing is too much. Everything is possible — it simply comes down to what&rsquo;s realistic for your budget.&rdquo;
+            &ldquo;Nothing is too much. Everything is possible - it simply comes down to realising your dreams&rdquo;
           </p>
           <cite
             style={{
